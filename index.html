@@ -1,112 +1,101 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Fenêtre et indicateur largeur/hauteur</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-    }
-    #taille {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .indicateur-container {
-      width: 300px;
-      height: 20px;
-      border: 1px solid #000;
-      background-color: #ccc;
-      margin-bottom: 5px;
-    }
-    .barre {
-      height: 100%;
-      width: 0%;
-      background-color: red;
-    }
-    .label {
-      margin-bottom: 2px;
-      font-weight: bold;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Fenêtre et indicateur largeur/hauteur</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    #taille {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .indicateur-container {
+      width: 300px;
+      height: 20px;
+      border: 1px solid #000;
+      background-color: #ccc;
+      margin-bottom: 5px;
+    }
+    .barre {
+      height: 100%;
+      width: 0%;
+      background-color: red;
+    }
+    .label {
+      margin-bottom: 2px;
+      font-weight: bold;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>=> Les onglets vont s’ouvrir ...</h1>
-  <p id="taille"></p>
+  <h1>Indicateur de taille et ouverture d'onglets</h1>
+  <p id="taille"></p>
 
-  <div class="label">Largeur :</div>
-  <div class="indicateur-container"><div id="barreLargeur" class="barre"></div></div>
+  <div class="label">Largeur :</div>
+  <div class="indicateur-container"><div id="barreLargeur" class="barre"></div></div>
 
-  <div class="label">Hauteur :</div>
-  <div class="indicateur-container"><div id="barreHauteur" class="barre"></div></div>
+  <div class="label">Hauteur :</div>
+  <div class="indicateur-container"><div id="barreHauteur" class="barre"></div></div>
 
-  <p>Vert : très proche de la cible, jaune : moyen, rouge : loin</p>
+  <p>Vert : très proche de la cible, jaune : moyen, rouge : loin</p>
 
-  <script>
-    const largeurCible = 900;
-    const hauteurCible = 400;
+  <!-- Bouton indispensable pour contourner le blocage anti-popup -->
+  <button onclick="ouvrirOnglets()">Ouvrir les onglets Preply</button>
 
-    function couleurBarre(ecart, seuils = [50, 150]) {
-      // ecart absolu
-      const absEcart = Math.abs(ecart);
-      if(absEcart <= seuils[0]) return "green";
-      if(absEcart <= seuils[1]) return "yellow";
-      return "red";
-    }
+  <script>
+    const largeurCible = 900;
+    const hauteurCible = 400;
 
-    function afficherTaille() {
-      const largeur = window.innerWidth;
-      const hauteur = window.innerHeight;
+    function couleurBarre(ecart, seuils = [50, 150]) {
+      const absEcart = Math.abs(ecart);
+      if(absEcart <= seuils[0]) return "green";
+      if(absEcart <= seuils[1]) return "yellow";
+      return "red";
+    }
 
-      // Mise à jour du texte
-      document.getElementById('taille').textContent =
-        `Taille de la fenêtre : ${largeur} x ${hauteur}`;
+    function afficherTaille() {
+      const largeur = window.innerWidth;
+      const hauteur = window.innerHeight;
 
-      // Calcul ratio pour les barres (proportion par rapport à la cible, max 100%)
-      const ratioLargeur = Math.min(largeur / largeurCible, 1) * 100;
-      const ratioHauteur = Math.min(hauteur / hauteurCible, 1) * 100;
+      document.getElementById('taille').textContent =
+        `Taille de la fenêtre : ${largeur} x ${hauteur}`;
 
-      // Mise à jour largeur
-      const barreL = document.getElementById('barreLargeur');
-      barreL.style.width = ratioLargeur + "%";
-      barreL.style.backgroundColor = couleurBarre(largeur - largeurCible);
+      const ratioLargeur = Math.min(largeur / largeurCible, 1) * 100;
+      const ratioHauteur = Math.min(hauteur / hauteurCible, 1) * 100;
 
-      // Mise à jour hauteur
-      const barreH = document.getElementById('barreHauteur');
-      barreH.style.width = ratioHauteur + "%";
-      barreH.style.backgroundColor = couleurBarre(hauteur - hauteurCible);
-    }
+      const barreL = document.getElementById('barreLargeur');
+      barreL.style.width = ratioLargeur + "%";
+      barreL.style.backgroundColor = couleurBarre(largeur - largeurCible);
 
-    // Mettre à jour dès le chargement et à chaque redimensionnement
-    window.addEventListener('load', afficherTaille);
-    window.addEventListener('resize', afficherTaille);
+      const barreH = document.getElementById('barreHauteur');
+      barreH.style.width = ratioHauteur + "%";
+      barreH.style.backgroundColor = couleurBarre(hauteur - hauteurCible);
+    }
 
-    // Fonctions pour ouvrir les onglets
-    function ouvrirOnglet_PB(code, name) {
-      const url = "https://preply.com/fr/manage-single-lessons/" + code + "?requestPage=HOME";
-      window.open(url, name, "width=200,height=200,resizable=yes,scrollbars=yes");
-    }
+    window.addEventListener('load', afficherTaille);
+    window.addEventListener('resize', afficherTaille);
 
-   function ouvrirOnglet(code, name) {
-         var url = "https://preply.com/fr/manage-single-lessons/" + code + "?requestPage=HOME";
-         let win = window.open(url, name);
-         // win.document.write('<html><head><title>' + name + '</title></head><body><h1>' + name + '</h1></body></html>');
-         // window.open(url, '_blank');
-      }
+    function ouvrirOnglet(code, name) {
+      const url = "https://preply.com/fr/manage-single-lessons/" + code + "?requestPage=HOME";
+      window.open(url, name);
+    }
 
-    function ouvrirOnglets() {
-      ouvrirOnglet(5553194, 'CHI');
-      //ouvrirOnglet(6338431, 'MAI');
-      ouvrirOnglet(8744778, 'YEN');
-      //ouvrirOnglet(6338483, 'HUONG');
-      ouvrirOnglet(7015356, 'THU');
-      //ouvrirOnglet(7044522, 'XUAN');
-      ouvrirOnglet(7434921, 'TRANG');
-      //HO!HO!ouvrirOnglet(37166876, 'THUY');
-      ouvrirOnglet(9298883, 'THUY');
-    }
-
-    window.addEventListener('load', ouvrirOnglets);
-  </script>
+    function ouvrirOnglets() {
+      ouvrirOnglet(5553194, 'CHI');
+      ouvrirOnglet(8744778, 'YEN');
+      ouvrirOnglet(7015356, 'THU');
+      ouvrirOnglet(7434921, 'TRANG');
+      ouvrirOnglet(9298883, 'THUY');
+    }
+  </script>
 </body>
 </html>
