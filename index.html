@@ -28,27 +28,32 @@
       margin-bottom: 2px;
       font-weight: bold;
     }
-    button {
-      padding: 10px 15px;
-      font-size: 16px;
-      margin-top: 15px;
+    #btnOuvrir {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 15px 0;
       cursor: pointer;
+      background-color: #2d7dfa;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+    #btnOuvrir:hover {
+      background-color: #1a5fd0;
     }
   </style>
 </head>
 <body>
-  <h1>Indicateur de taille et ouverture d'onglets</h1>
-  <p id="taille"></p>
+  <h1>=> Cliquez sur le bouton pour ouvrir les onglets</h1>
 
+  <button id="btnOuvrir">Ouvrir les onglets</button>
+
+  <p id="taille"></p>
   <div class="label">Largeur :</div>
   <div class="indicateur-container"><div id="barreLargeur" class="barre"></div></div>
-
   <div class="label">Hauteur :</div>
   <div class="indicateur-container"><div id="barreHauteur" class="barre"></div></div>
-
   <p>Vert : très proche de la cible, jaune : moyen, rouge : loin</p>
-
-  <button onclick="ouvrirOnglets()">Ouvrir les onglets Preply</button>
 
   <script>
     const largeurCible = 900;
@@ -56,8 +61,8 @@
 
     function couleurBarre(ecart, seuils = [50, 150]) {
       const absEcart = Math.abs(ecart);
-      if(absEcart <= seuils[0]) return "green";
-      if(absEcart <= seuils[1]) return "yellow";
+      if (absEcart <= seuils[0]) return "green";
+      if (absEcart <= seuils[1]) return "yellow";
       return "red";
     }
 
@@ -83,25 +88,32 @@
     window.addEventListener('load', afficherTaille);
     window.addEventListener('resize', afficherTaille);
 
-    function ouvrirOnglets() {
-      const codes = [
-        { code: 5553194, name: 'CHI' },
-        { code: 8744778, name: 'YEN' },
-        { code: 7015356, name: 'THU' },
-        { code: 7434921, name: 'TRANG' },
-        { code: 9298883, name: 'THUY' }
-      ];
-
-      codes.forEach(o => {
-        const a = document.createElement('a');
-        a.href = "https://preply.com/fr/manage-single-lessons/" + o.code + "?requestPage=HOME";
-        a.target = o.name; // Ouvre un nouvel onglet identifié par le nom
-        a.rel = "noopener noreferrer";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      });
+    // Fonctions pour ouvrir les onglets
+    function ouvrirOnglet_PB(code, name) {
+      const url = "https://preply.com/fr/manage-single-lessons/" + code + "?requestPage=HOME";
+      window.open(url, name, "width=200,height=200,resizable=yes,scrollbars=yes");
     }
+
+    function ouvrirOnglet(code, name) {
+      var url = "https://preply.com/fr/manage-single-lessons/" + code + "?requestPage=HOME";
+      window.open(url, name);
+    }
+
+    function ouvrirOnglets() {
+      ouvrirOnglet(5553194, 'CHI');
+      //ouvrirOnglet(6338431, 'MAI');
+      ouvrirOnglet(8744778, 'YEN');
+      //ouvrirOnglet(6338483, 'HUONG');
+      ouvrirOnglet(7015356, 'THU');
+      //ouvrirOnglet(7044522, 'XUAN');
+      ouvrirOnglet(7434921, 'TRANG');
+      //HO!HO!ouvrirOnglet(37166876, 'THUY');
+      ouvrirOnglet(9298883, 'THUY');
+    }
+
+    // Déclenchement uniquement au clic (nécessaire pour éviter le blocage
+    // des popups par le navigateur sur un site hébergé, ex. GitHub Pages)
+    document.getElementById('btnOuvrir').addEventListener('click', ouvrirOnglets);
   </script>
 </body>
 </html>
