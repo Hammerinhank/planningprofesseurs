@@ -83,13 +83,8 @@
     window.addEventListener('load', afficherTaille);
     window.addEventListener('resize', afficherTaille);
 
-    function ouvrirOnglet(code, name) {
-      const url = "https://preply.com/fr/manage-single-lessons/" + code + "?requestPage=HOME";
-      window.open(url, name);
-    }
-
     function ouvrirOnglets() {
-      const onglets = [
+      const codes = [
         { code: 5553194, name: 'CHI' },
         { code: 8744778, name: 'YEN' },
         { code: 7015356, name: 'THU' },
@@ -97,10 +92,14 @@
         { code: 9298883, name: 'THUY' }
       ];
 
-      onglets.forEach((o, index) => {
-        setTimeout(() => {
-          ouvrirOnglet(o.code, o.name);
-        }, index * 300);
+      codes.forEach(o => {
+        const a = document.createElement('a');
+        a.href = "https://preply.com/fr/manage-single-lessons/" + o.code + "?requestPage=HOME";
+        a.target = o.name; // Ouvre un nouvel onglet identifié par le nom
+        a.rel = "noopener noreferrer";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       });
     }
   </script>
