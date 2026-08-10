@@ -48,7 +48,6 @@
 
   <p>Vert : très proche de la cible, jaune : moyen, rouge : loin</p>
 
-  <!-- Bouton indispensable pour contourner le blocage anti-popup -->
   <button onclick="ouvrirOnglets()">Ouvrir les onglets Preply</button>
 
   <script>
@@ -90,11 +89,19 @@
     }
 
     function ouvrirOnglets() {
-      ouvrirOnglet(5553194, 'CHI');
-      ouvrirOnglet(8744778, 'YEN');
-      ouvrirOnglet(7015356, 'THU');
-      ouvrirOnglet(7434921, 'TRANG');
-      ouvrirOnglet(9298883, 'THUY');
+      const onglets = [
+        { code: 5553194, name: 'CHI' },
+        { code: 8744778, name: 'YEN' },
+        { code: 7015356, name: 'THU' },
+        { code: 7434921, name: 'TRANG' },
+        { code: 9298883, name: 'THUY' }
+      ];
+
+      onglets.forEach((o, index) => {
+        setTimeout(() => {
+          ouvrirOnglet(o.code, o.name);
+        }, index * 300);
+      });
     }
   </script>
 </body>
